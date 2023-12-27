@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const jwt = require('jsonwebtoken');
-const passport = require('passport');
 
 // const { isEmpty } = require('../utils/utils.js');
 // const db = require('../database/db.js');

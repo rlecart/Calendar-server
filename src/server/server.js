@@ -1,7 +1,6 @@
 const express = require('express');
 const http = require('http');
 const SECRET = require('../../secret.js');
-const passport = require('passport');
 const session = require('express-session');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -9,8 +8,6 @@ const cookieParser = require('cookie-parser');
 
 // const devRoutes = require('../routes/dev.js');
 const userRoutes = require('../routes/user.js');
-const { initSockets } = require('../sockets/sockets.js');
-// const { configurePassportStrategies } = require('../passport/passportStrategies.js');
 
 const startServer = (options) => {
   return (new Promise(async (res, rej) => {
@@ -36,15 +33,12 @@ const startServer = (options) => {
       credentials: true,
     };
     await app.use(cors(corsOptions));
-    await app.use(passport.initialize());
-    await app.use(await passport.session());
     // app.use(
     //   express.urlencoded({
     //     extended: true,
     //   })
     // );
 
-    // configurePassportStrategies();
 
     await app.get('/', (req, res) => {
       res.send('homepage');
