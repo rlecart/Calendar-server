@@ -8,7 +8,6 @@ export interface EventInterface {
   userId: number,
   title: string,
   description: string,
-  isAllDay: boolean,
   startTime: number,
   endTime: number,
   notes: string,
@@ -26,7 +25,6 @@ export const createEventMiddleware = async (req: Request, res: Response, next: N
 
     if (body.title === undefined
       || body.description === undefined
-      || body.isAllDay === undefined
       || body.startTime === undefined
       || body.endTime === undefined
       || body.notes === undefined
@@ -150,7 +148,6 @@ export const updateEventMiddleware = async (req: Request, res: Response, next: N
 
       || req.body.title === undefined
       || req.body.description === undefined
-      || req.body.isAllDay === undefined
       || req.body.startTime === undefined
       || req.body.endTime === undefined
       || req.body.notes === undefined

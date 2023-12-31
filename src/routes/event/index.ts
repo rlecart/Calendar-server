@@ -13,7 +13,6 @@ export interface CalendarEventDataInterface {
   id: number,
   title: string,
   description: string,
-  isAllDay: boolean,
   startTime: string,
   endTime: string,
   notes: string,

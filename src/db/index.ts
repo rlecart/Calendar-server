@@ -45,7 +45,6 @@ const firstQuery = async () => {
     //     userId INT NOT NULL,
     //     title VARCHAR(255) NOT NULL,
     //     description VARCHAR(255) NOT NULL,
-    //     isAllDay TINYINT NOT NULL,
     //     startTime BIGINT NOT NULL,
     //     endTime BIGINT NOT NULL,
     //     notes VARCHAR(255) NOT NULL,
@@ -93,7 +92,11 @@ firstQuery();
 // }
 
 const createUser = async (username: string, password: string) => {
-  const query = `INSERT INTO Users (username, password) VALUES (?, ?)`;
+  const query = `
+    INSERT INTO Users
+    (username, password)
+    VALUES (?, ?)
+  `;
 
   try {
     await ensureConnection();
@@ -107,7 +110,11 @@ const createUser = async (username: string, password: string) => {
 }
 
 const createEvent = async (newEvent: EventInterface, userId: number) => {
-  const query = `INSERT INTO Events (userId, title, description, isAllDay, startTime, endTime, notes, color, dayOfMonth, month, year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const query = `
+    INSERT INTO Events
+    (userId, title, description, startTime, endTime, notes, color, dayOfMonth, month, year)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
 
   try {
     await ensureConnection();
@@ -116,7 +123,6 @@ const createEvent = async (newEvent: EventInterface, userId: number) => {
       userId,
       newEvent.title,
       newEvent.description,
-      newEvent.isAllDay,
       newEvent.startTime,
       newEvent.endTime,
       newEvent.notes,
@@ -135,7 +141,10 @@ const createEvent = async (newEvent: EventInterface, userId: number) => {
 }
 
 const getUserByUsername = async (username: string) => {
-  const query = `SELECT * FROM Users WHERE username = ?`;
+  const query = `
+    SELECT * FROM Users
+    WHERE username = ?
+  `;
 
   try {
     await ensureConnection();
@@ -233,7 +242,6 @@ const updateEvent = async (userId: number, eventId: number, newEvent: EventInter
     SET
       title = ?,
       description = ?,
-      isAllDay = ?,
       startTime = ?,
       endTime = ?,
       notes = ?,
@@ -251,7 +259,6 @@ const updateEvent = async (userId: number, eventId: number, newEvent: EventInter
     const [results] = await connection!.query(query, [
       newEvent.title,
       newEvent.description,
-      newEvent.isAllDay,
       newEvent.startTime,
       newEvent.endTime,
       newEvent.notes,
