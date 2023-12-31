@@ -14,14 +14,19 @@ export const createUserMiddleware = async (req: Request, res: Response, next: Ne
     const body: Body = req.body;
 
     if (!body.username || !body.password)
-      return res.sendStatus(400);
+      throw (400);
 
     if (await db.usernameExists(body.username))
       return res.status(409).send('Cet identifiant est déjà pris');
 
     next();
   } catch (err) {
-    res.sendStatus(500);
+    console.log('createUserMiddleware err', err)
+
+    if (err === 400)
+      res.sendStatus(400);
+    else
+      res.sendStatus(500);
   }
 }
 

@@ -3,7 +3,7 @@ const router = express.Router({ mergeParams: true });
 import jwt from 'jsonwebtoken';
 
 import { Request, Response } from 'express'
-import { createEventMiddleware, getDayEventMiddleware, getMonthEventMiddleware } from './eventMiddlewares';
+import { createEventMiddleware, getDayEventMiddleware, getMonthEventMiddleware, updateEventMiddleware } from './eventMiddlewares';
 import db from '../../db';
 import SECRET from '../../../secret';
 import passport from 'passport';
@@ -73,10 +73,29 @@ router.get('/year/:year/month/:month/day/:day', [
     const month = +req.params.month;
     const day = +req.params.day;
 
-    const events = await db.getDayEvents(month, year, day, user.id);
+    const events = await db.getDayEvents(user.id, month, year, day);
 
     console.log('events', events)
     res.status(200).send(events);
+  }
+  catch (err) {
+    console.log('GET /events/year/:year/month/:month/day/:day', err)
+    res.sendStatus(500);
+  }
+});
+
+router.put('/:eventId', [
+  passport.authenticate('jwt', { session: false }),
+  updateEventMiddleware,
+], async (req: Request, res: Response) => {
+  try {
+    const userId = (req.user as IUser).id;
+    const eventId = +req.params.eventId;
+    const newEvent = req.body;
+
+    await db.updateEvent(userId, eventId, newEvent);
+
+    res.sendStatus(200);
   }
   catch (err) {
     console.log('GET /events/year/:year/month/:month/day/:day', err)

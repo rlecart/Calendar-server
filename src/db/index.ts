@@ -37,7 +37,7 @@ export const ensureConnection = async () => {
 
 const firstQuery = async () => {
   try {
-    await ensureConnection();
+    // await ensureConnection();
 
     //   const createEventsTable = `
     //   CREATE TABLE IF NOT EXISTS Events (
@@ -177,7 +177,7 @@ const getMonthEvents = async (month: number, year: number, userId: number) => {
   }
 }
 
-const getDayEvents = async (month: number, year: number, day: number, userId: number) => {
+const getDayEvents = async (userId: number, month: number, year: number, day: number) => {
   const query = `
     SELECT * FROM Events
     WHERE userId = ?
@@ -205,6 +205,70 @@ const getDayEvents = async (month: number, year: number, day: number, userId: nu
   }
 }
 
+const getEventById = async (userId: number, eventId: number) => {
+  const query = `
+    SELECT * FROM Events
+    WHERE userId = ?
+    AND id = ?
+  `;
+
+  try {
+    await ensureConnection();
+
+    const [results] = await connection!.query(query, [
+      userId,
+      eventId,
+    ]);
+
+    return (results as mysql.RowDataPacket[]);
+  } catch (err) {
+    console.log('getDayEvents err', err)
+    throw err;
+  }
+}
+
+const updateEvent = async (userId: number, eventId: number, newEvent: EventInterface) => {
+  const query = `
+    UPDATE Events
+    SET
+      title = ?,
+      description = ?,
+      isAllDay = ?,
+      startTime = ?,
+      endTime = ?,
+      notes = ?,
+      color = ?,
+      dayOfMonth = ?,
+      month = ?,
+      year = ?
+    WHERE userId = ?
+    AND id = ?
+  `;
+
+  try {
+    await ensureConnection();
+
+    const [results] = await connection!.query(query, [
+      newEvent.title,
+      newEvent.description,
+      newEvent.isAllDay,
+      newEvent.startTime,
+      newEvent.endTime,
+      newEvent.notes,
+      newEvent.color,
+      newEvent.dayOfMonth,
+      newEvent.month,
+      newEvent.year,
+      userId,
+      eventId,
+    ]);
+
+  } catch (err) {
+    console.log('getDayEvents err', err)
+    throw err;
+  }
+}
+
 export default {
   usernameExists,
   eventOverlaps,
@@ -215,4 +279,6 @@ export default {
 
   getMonthEvents,
   getDayEvents,
+  getEventById,
+  updateEvent,
 }
