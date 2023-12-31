@@ -1,4 +1,4 @@
-const isEmpty = (obj) => {
+const isEmpty = (obj: any) => {
   if ((!obj && typeof obj !== 'number') ||
     (typeof obj === 'object' && Object.keys(obj).length === 0))
     return (true);
@@ -6,7 +6,7 @@ const isEmpty = (obj) => {
     return (false);
 };
 
-const realerIsNaN = (value) => {
+const realerIsNaN = (value: number) => {
   if (typeof value !== 'number')
     return (true);
   else
@@ -17,7 +17,7 @@ const generateId = () => {
   return (Math.random().toString(36).substring(2));
 };
 
-const objLen = (obj) => {
+const objLen = (obj: object) => {
   return (Object.keys(obj).length);
 };
 
