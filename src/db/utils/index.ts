@@ -8,16 +8,15 @@ export const usernameExists = async (username: string) => {
   return false;
 }
 
-export const eventOverlaps = async (newEvent: EventInterface) => {
+export const eventOverlaps = async (newEvent: EventInterface, userId: number) => {
   console.log('newEvent', newEvent)
   const sql = `
       SELECT * FROM Events
       WHERE userId = ?
       AND (
-        (startTime BETWEEN ? AND ?)
-        OR (endTime BETWEEN ? AND ?)
-        OR (? BETWEEN startTime AND endTime)
-        OR (? BETWEEN startTime AND endTime)
+        (startTime >= ? AND startTime < ?)
+        OR (endTime > ? AND endTime <= ?)
+        OR (startTime < ? AND endTime > ?)
       )
   `;
 
@@ -25,7 +24,7 @@ export const eventOverlaps = async (newEvent: EventInterface) => {
     await ensureConnection();
 
     const [results] = await connection!.query(sql, [
-      newEvent.userId,
+      userId,
       newEvent.startTime,
       newEvent.endTime,
       newEvent.startTime,
@@ -33,7 +32,7 @@ export const eventOverlaps = async (newEvent: EventInterface) => {
       newEvent.startTime,
       newEvent.endTime,
     ]);
-    return (results as mysql.RowDataPacket[]);
+    return (results as mysql.RowDataPacket[]).length > 0;
   } catch (err) {
     console.log('eventOverlaps err', err)
     throw err;

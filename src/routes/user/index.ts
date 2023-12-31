@@ -28,7 +28,16 @@ router.post('/signup', [
       username: req.body.username,
     }, SECRET, { expiresIn: '24h' });
 
-    res.status(200).send(token);
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      // signed: true, // ca ca unauthorized avec passport
+      secure: false,
+      // maxAge: 1000 * 10, // 10s
+      maxAge: 24 * 60 * 60 * 1000, // 24h
+    });
+
+    res.sendStatus(200)
   }
   catch (err) {
     console.log('POST /users', err)
@@ -36,8 +45,8 @@ router.post('/signup', [
   }
 });
 
-interface IUser {
-  id: string,
+export interface IUser {
+  id: number,
   username: string,
 }
 
@@ -47,7 +56,7 @@ router.post('/login', [
   try {
     // const newUserId = await db.createUser(req.body.username, req.body.password);
     const user = req.user as IUser;
-    
+
     console.log('req.user', req.user)
 
     const token = jwt.sign({
@@ -55,8 +64,16 @@ router.post('/login', [
       username: user.username,
     }, SECRET, { expiresIn: '24h' });
 
-    res.status(200).send(token);
-    // res.sendStatus(200);
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      // signed: true, // ca ca unauthorized avec passport
+      secure: false,
+      // maxAge: 1000 * 10, // 10s
+      maxAge: 24 * 60 * 60 * 1000, // 24h
+    });
+
+    res.sendStatus(200)
   }
   catch (err) {
     console.log('POST /users', err)

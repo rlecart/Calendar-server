@@ -6,6 +6,7 @@ import { Request, Response } from 'express'
 import { createEventMiddleware } from './eventsMiddlewares';
 import db from '../../db';
 import SECRET from '../../../secret';
+import passport from 'passport';
 
 export interface CalendarEventDataInterface {
   id: number,
@@ -22,9 +23,11 @@ export interface CalendarEventDataInterface {
 }
 
 router.post('/', [
+  passport.authenticate('jwt', { session: false }),
   createEventMiddleware,
 ], async (req: Request, res: Response) => {
   try {
+    console.log('req.user', req.user);
     const newEventId = await db.createEvent(req.body, 8);
     console.log('newEventId', newEventId)
 

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 
 import db from '../../db';
+import { IUser } from '../user';
 
 export interface EventInterface {
   userId: number,
@@ -20,6 +21,7 @@ export const createEventMiddleware = async (req: Request, res: Response, next: N
   try {
     const body: EventInterface = req.body;
     console.log('body', body)
+    const user = req.user as IUser;
 
     if (body.title === undefined
       || body.description === undefined
@@ -34,11 +36,10 @@ export const createEventMiddleware = async (req: Request, res: Response, next: N
     )
       return res.sendStatus(400);
 
-    const eventOverlaps = await db.eventOverlaps(body);
-    console.log('eventOverlaps', eventOverlaps)
-    // throw new Error('eventOverlaps')
-    // if (await db.eventOverlaps(body))
-    //   return res.status(409).send('Il y a déjà un événement à cette heure là.');
+    const eventOverlaps = await db.eventOverlaps(body, user.id);
+    // console.log('eventOverlaps', eventOverlaps)
+    if (eventOverlaps)
+      return res.status(409).send('Il y a déjà un événement à cette heure là.');
 
     next();
   } catch (err) {
