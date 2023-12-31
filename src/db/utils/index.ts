@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise'
 
-import { EventInterface } from "../../routes/events/eventsMiddlewares";
+import { EventInterface } from "../../routes/event/eventMiddlewares";
 
 import { connection, ensureConnection } from "../index";
 

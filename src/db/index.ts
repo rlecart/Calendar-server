@@ -5,7 +5,7 @@ import mysql, { Connection } from 'mysql2/promise'
 import DB_PASSWORD from '../../secrets/db'
 
 import { usernameExists, eventOverlaps } from "./utils"
-import { EventInterface } from '../routes/events/eventsMiddlewares';
+import { EventInterface } from '../routes/event/eventMiddlewares';
 
 export let connection: null | Connection = null;
 
@@ -66,8 +66,8 @@ const firstQuery = async () => {
     //     console.log("Table Events deleted successfully.");
     //   });
 
-    const [results] = await connection!.query('SELECT * FROM Events');
-    console.log('results', results)
+    // const [results] = await connection!.query('SELECT * FROM Events');
+    // console.log('results', results)
 
     //   const username = 'username3';
     //   const password = 'password';
@@ -151,6 +151,59 @@ const getUserByUsername = async (username: string) => {
   }
 }
 
+const getMonthEvents = async (month: number, year: number, userId: number) => {
+  const query = `
+    SELECT * FROM Events
+    WHERE userId = ?
+    AND (
+      year = ?
+      AND month = ?
+    )
+  `;
+
+  try {
+    await ensureConnection();
+
+    const [results] = await connection!.query(query, [
+      userId,
+      year,
+      month,
+    ]);
+
+    return (results as mysql.RowDataPacket[]);
+  } catch (err) {
+    console.log('getMonthEvents err', err)
+    throw err;
+  }
+}
+
+const getDayEvents = async (month: number, year: number, day: number, userId: number) => {
+  const query = `
+    SELECT * FROM Events
+    WHERE userId = ?
+    AND (
+      year = ?
+      AND month = ?
+      AND dayOfMonth = ?
+    )
+  `;
+
+  try {
+    await ensureConnection();
+
+    const [results] = await connection!.query(query, [
+      userId,
+      year,
+      month,
+      day,
+    ]);
+
+    return (results as mysql.RowDataPacket[]);
+  } catch (err) {
+    console.log('getDayEvents err', err)
+    throw err;
+  }
+}
 
 export default {
   usernameExists,
@@ -159,4 +212,7 @@ export default {
   getUserByUsername,
   createUser,
   createEvent,
+
+  getMonthEvents,
+  getDayEvents,
 }

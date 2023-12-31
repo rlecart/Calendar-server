@@ -13,7 +13,7 @@ import cookieParser from 'cookie-parser';
 
 // const devRoutes = require('../routes/dev.js');
 import userRoutes from '../routes/user';
-import eventsRoutes from '../routes/events';
+import eventRoutes from '../routes/event';
 import { initDB } from "../db";
 
 const startServer = (options: OptionsInterface) => {
@@ -59,7 +59,7 @@ const startServer = (options: OptionsInterface) => {
     });
     // await app.use('/dev', devRoutes);
     app.use('/user', userRoutes);
-    app.use('/events', eventsRoutes);
+    app.use('/event', eventRoutes);
 
     const server = https.createServer(options.credentials, app);
 
