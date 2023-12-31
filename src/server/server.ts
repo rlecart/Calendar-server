@@ -1,20 +1,22 @@
-const express = require('express');
-const http = require('http');
-const SECRET = require('../../secret.js');
-const session = require('express-session');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
+import { OptionsInterface } from "./options";
+
+import express from 'express';
+import http from 'http';
+import SECRET from '../../secret';
+import session from 'express-session';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 // const db = require('../database/db.js');
 
 // const devRoutes = require('../routes/dev.js');
-const userRoutes = require('../routes/user.js');
+import userRoutes from '../routes/user';
 
-const startServer = (options) => {
+const startServer = (options: OptionsInterface) => {
   return (new Promise(async (res, rej) => {
-    app = express();
-    await app.use(express.json());
-    await app.use(cookieParser(SECRET));
-    await app.use(
+    const app = express();
+    app.use(express.json());
+    app.use(cookieParser(SECRET));
+    app.use(
       session({
         secret: SECRET,
         cookie: {
@@ -32,7 +34,7 @@ const startServer = (options) => {
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
       credentials: true,
     };
-    await app.use(cors(corsOptions));
+    app.use(cors(corsOptions));
     // app.use(
     //   express.urlencoded({
     //     extended: true,
@@ -40,11 +42,11 @@ const startServer = (options) => {
     // );
 
 
-    await app.get('/', (req, res) => {
+    app.get('/', (req, res) => {
       res.send('homepage');
     });
     // await app.use('/dev', devRoutes);
-    await app.use('/user', userRoutes);
+    app.use('/user', userRoutes);
 
     const server = http.createServer({}, app);
 
@@ -54,12 +56,12 @@ const startServer = (options) => {
   }));
 };
 
-const stopServer = (app, cb) => {
-  app.close();
-  cb();
-};
+// const stopServer = (app, cb) => {
+//   app.close();
+//   cb();
+// };
 
-module.exports = {
+export {
   startServer,
-  stopServer,
+  // stopServer,
 };

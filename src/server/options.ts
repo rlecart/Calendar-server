@@ -5,6 +5,22 @@ const fs = require('fs');
 const key = undefined;
 const cert = undefined;
 
+export interface OptionsInterface {
+  credentials: {
+    key: string | undefined,
+    cert: string | undefined,
+  },
+  front: {
+    path: string,
+    port: number,
+  },
+  back: {
+    path: string,
+    port: number,
+  }
+
+}
+
 const options = {
   credentials: {
     key: key,
@@ -20,4 +36,4 @@ const options = {
   }
 };
 
-module.exports = options;
+export default options;

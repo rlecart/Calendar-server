@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router({ mergeParams: true });
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 // const { isEmpty } = require('../utils/utils.js');
 // const db = require('../database/db.js');
@@ -16,9 +16,9 @@ router.get('/',
       res.sendStatus(200);
     }
     catch (err) {
-      res.sendStatus(err);
+      res.sendStatus(403);
     }
   }
 );
 
-module.exports = router;
+export default router;
