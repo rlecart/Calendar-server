@@ -5,7 +5,23 @@ import { EventInterface } from "../../routes/event/eventMiddlewares";
 import { connection, ensureConnection } from "../index";
 
 export const usernameExists = async (username: string) => {
-  return false;
+  const sql = `
+      SELECT * FROM Users
+      WHERE username = ?
+  `;
+
+  try {
+    await ensureConnection();
+
+    const [results] = await connection!.query(sql, [
+      username
+    ]);
+    return (results as mysql.RowDataPacket[]).length > 0;
+  } catch (err) {
+    console.log('usernameExists err', err)
+    throw err;
+  }
+
 }
 
 export const eventOverlaps = async (newEvent: EventInterface, userId: number) => {

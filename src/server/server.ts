@@ -35,7 +35,8 @@ const startServer = (options: OptionsInterface) => {
       })
     );
     const corsOptions = {
-      origin: `https://${options.front.path}:${options.front.port}`,
+      origin: `http://${options.front.path}:${options.front.port}`,
+      // origin: `https://${options.front.path}:${options.front.port}`, TODO: changer en prod
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
       credentials: true,
     };

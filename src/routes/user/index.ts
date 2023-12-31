@@ -81,4 +81,32 @@ router.post('/login', [
   }
 });
 
+router.delete('/logout', [
+  passport.authenticate('jwt', { session: false }),
+  // logoutMiddleware
+], async (req: Request, res: Response) => {
+  try {
+    req.session.destroy(async (err) => {
+      try {
+        if (err)
+          throw (err);
+        res.clearCookie('connect.sid');
+        res.clearCookie('jwt');
+        console.log('successfull logout')
+        res.sendStatus(200);
+      }
+      catch (err) {
+        console.log('DELETE /users/logout : req.session.destroy(cb)', err)
+        res.sendStatus(500);
+      }
+    });
+  }
+  catch (err) {
+    console.log('DELETE /users/logout', err)
+    res.sendStatus(500);
+  }
+}
+);
+
+
 export default router;

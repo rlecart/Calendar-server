@@ -135,7 +135,7 @@ const createEvent = async (newEvent: EventInterface, userId: number) => {
     console.log("Event created successfully.");
     return (results as mysql.ResultSetHeader).insertId;
   } catch (err) {
-    console.log('createUser err', err)
+    console.log('createEvent err', err)
     throw err;
   }
 }
