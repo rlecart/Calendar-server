@@ -10,13 +10,13 @@ import jwt from 'jsonwebtoken';
 // } = require('./middlewares/userMiddleware.js');
 // const { getATL } = require('../utils/roles.js');
 
-router.get('/',
+router.post('/',
   async (req, res) => {
     try {
       res.sendStatus(200);
     }
     catch (err) {
-      res.sendStatus(403);
+      res.sendStatus(500);
     }
   }
 );

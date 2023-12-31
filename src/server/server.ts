@@ -1,7 +1,7 @@
 import { OptionsInterface } from "./options";
 
 import express from 'express';
-import http from 'http';
+import https from 'https';
 import SECRET from '../../secret';
 import session from 'express-session';
 import cors from 'cors';
@@ -9,7 +9,7 @@ import cookieParser from 'cookie-parser';
 // const db = require('../database/db.js');
 
 // const devRoutes = require('../routes/dev.js');
-import userRoutes from '../routes/user';
+import usersRoutes from '../routes/users';
 
 const startServer = (options: OptionsInterface) => {
   return (new Promise(async (res, rej) => {
@@ -30,7 +30,7 @@ const startServer = (options: OptionsInterface) => {
       })
     );
     const corsOptions = {
-      origin: `http://${options.front.path}:${options.front.port}`,
+      origin: `https://${options.front.path}:${options.front.port}`,
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
       credentials: true,
     };
@@ -46,9 +46,9 @@ const startServer = (options: OptionsInterface) => {
       res.send('homepage');
     });
     // await app.use('/dev', devRoutes);
-    app.use('/user', userRoutes);
+    app.use('/users', usersRoutes);
 
-    const server = http.createServer({}, app);
+    const server = https.createServer(options.credentials, app);
 
     server.listen(options.back.port, () => {
       res({ server: server, app: app });

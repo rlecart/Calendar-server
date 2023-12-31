@@ -1,14 +1,14 @@
 const fs = require('fs');
 
-// const key = fs.readFileSync(__dirname + '/../../certs/CA/localhost/localhost.decrypted.key');
-// const cert = fs.readFileSync(__dirname + '/../../certs/CA/localhost/localhost.crt');
-const key = undefined;
-const cert = undefined;
+const key = fs.readFileSync(__dirname + '/../../certs/key.pem');
+const cert = fs.readFileSync(__dirname + '/../../certs/cert.pem');
+// const key = undefined;
+// const cert = undefined;
 
 export interface OptionsInterface {
   credentials: {
-    key: string | undefined,
-    cert: string | undefined,
+    key: string,
+    cert: string,
   },
   front: {
     path: string,
