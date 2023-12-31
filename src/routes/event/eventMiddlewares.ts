@@ -144,7 +144,6 @@ export const updateEventMiddleware = async (req: Request, res: Response, next: N
     const event = await db.getEventById(user.id, +req.params.eventId);
     if (!event || event.length === 0)
       throw (404);
-      console.log('aaaaaaaaaaaaa')
 
     if (
       !req.body || isEmpty(req.body)
@@ -187,7 +186,32 @@ export const updateEventMiddleware = async (req: Request, res: Response, next: N
 
     next();
   } catch (err) {
-    console.log('getDayEventMiddleware err', err)
+    console.log('updateEventMiddleware err', err)
+
+    if (err === 400)
+      res.sendStatus(400);
+    else if (err === 404)
+      res.sendStatus(404);
+    else
+      res.sendStatus(500);
+  }
+}
+
+export const deleteEventMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = req.user as IUser;
+
+    if (req.params.eventId === undefined
+      || isNaN(+req.params.eventId))
+      throw (400);
+
+    const event = await db.getEventById(user.id, +req.params.eventId);
+    if (!event || event.length === 0)
+      throw (404);
+
+    next();
+  } catch (err) {
+    console.log('deleteEventMiddleware err', err)
 
     if (err === 400)
       res.sendStatus(400);

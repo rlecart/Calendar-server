@@ -269,6 +269,27 @@ const updateEvent = async (userId: number, eventId: number, newEvent: EventInter
   }
 }
 
+const deleteEvent = async (userId: number, eventId: number) => {
+  const query = `
+    DELETE FROM Events
+    WHERE userId = ?
+    AND id = ?
+  `;
+
+  try {
+    await ensureConnection();
+
+    const [results] = await connection!.query(query, [
+      userId,
+      eventId,
+    ]);
+
+  } catch (err) {
+    console.log('getDayEvents err', err)
+    throw err;
+  }
+}
+
 export default {
   usernameExists,
   eventOverlaps,
@@ -281,4 +302,5 @@ export default {
   getDayEvents,
   getEventById,
   updateEvent,
+  deleteEvent,
 }

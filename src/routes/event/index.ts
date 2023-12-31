@@ -3,7 +3,7 @@ const router = express.Router({ mergeParams: true });
 import jwt from 'jsonwebtoken';
 
 import { Request, Response } from 'express'
-import { createEventMiddleware, getDayEventMiddleware, getMonthEventMiddleware, updateEventMiddleware } from './eventMiddlewares';
+import { createEventMiddleware, deleteEventMiddleware, getDayEventMiddleware, getMonthEventMiddleware, updateEventMiddleware } from './eventMiddlewares';
 import db from '../../db';
 import SECRET from '../../../secret';
 import passport from 'passport';
@@ -58,7 +58,7 @@ router.get('/year/:year/month/:month', [
     res.status(200).send(events);
   }
   catch (err) {
-    console.log('GET /events/year/:year/month/:month', err)
+    console.log('GET /event/year/:year/month/:month', err)
     res.sendStatus(500);
   }
 });
@@ -79,7 +79,7 @@ router.get('/year/:year/month/:month/day/:day', [
     res.status(200).send(events);
   }
   catch (err) {
-    console.log('GET /events/year/:year/month/:month/day/:day', err)
+    console.log('GET /event/year/:year/month/:month/day/:day', err)
     res.sendStatus(500);
   }
 });
@@ -98,7 +98,26 @@ router.put('/:eventId', [
     res.sendStatus(200);
   }
   catch (err) {
-    console.log('GET /events/year/:year/month/:month/day/:day', err)
+    console.log('PUT /event/:eventId', err)
+    res.sendStatus(500);
+  }
+});
+
+
+router.delete('/:eventId', [
+  passport.authenticate('jwt', { session: false }),
+  deleteEventMiddleware,
+], async (req: Request, res: Response) => {
+  try {
+    const userId = (req.user as IUser).id;
+    const eventId = +req.params.eventId;
+
+    await db.deleteEvent(userId, eventId);
+
+    res.sendStatus(200);
+  }
+  catch (err) {
+    console.log('DELETE /event/:eventId', err)
     res.sendStatus(500);
   }
 });
