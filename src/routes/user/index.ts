@@ -81,7 +81,7 @@ router.post('/login', [
 });
 
 router.delete('/logout', [
-  passport.authenticate('jwt', { session: false }),
+  // passport.authenticate('jwt', { session: false }),
   // logoutMiddleware
 ], async (req: Request, res: Response) => {
   try {
