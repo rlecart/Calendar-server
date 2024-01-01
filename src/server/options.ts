@@ -1,7 +1,15 @@
 const fs = require('fs');
 
-const key = fs.readFileSync(__dirname + process.env.NODE_ENV === 'production' ? '/..' : '' + '/../../certs/key.pem');
-const cert = fs.readFileSync(__dirname + process.env.NODE_ENV === 'production' ? '/..' : '' + '/../../certs/cert.pem');
+const keyPath = process.env.NODE_ENV === 'production'
+  ? __dirname + '/../../../certs/key.pem'
+  : __dirname + '/../../certs/key.pem';
+
+const certPath = process.env.NODE_ENV === 'production'
+  ? __dirname + '/../../../certs/cert.pem'
+  : __dirname + '/../../certs/cert.pem';
+
+const key = fs.readFileSync(keyPath);
+const cert = fs.readFileSync(certPath);
 // const key = undefined;
 // const cert = undefined;
 
