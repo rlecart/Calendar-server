@@ -36,7 +36,6 @@ export const createEventMiddleware = async (req: Request, res: Response, next: N
       throw (400);
 
     const eventOverlaps = await db.eventOverlaps(body, user.id);
-    // console.log('eventOverlaps', eventOverlaps)
     if (eventOverlaps)
       return res.status(409).send('Il y a déjà un événement à cette heure là.');
 

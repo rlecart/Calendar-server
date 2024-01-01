@@ -39,7 +39,7 @@ const firstQuery = async () => {
   try {
     // await ensureConnection();
 
-    //   const createEventsTable = `
+    // const createEventsTable = `
     //   CREATE TABLE IF NOT EXISTS Events (
     //     id INT AUTO_INCREMENT PRIMARY KEY,
     //     userId INT NOT NULL,
@@ -54,16 +54,9 @@ const firstQuery = async () => {
     //     year INT NOT NULL
     //   );
     // `;
+    // await connection!.query(createEventsTable);
 
-    //   await connection.query(createEventsTable, (error, results) => {
-    //     if (error) throw error;
-    //     console.log("Table Events created successfully.");
-    //   });
-
-    //   await connection.query(`DROP TABLE Events`, (error, results) => {
-    //     if (error) throw error;
-    //     console.log("Table Events deleted successfully.");
-    //   });
+    // await connection!.query(`DROP TABLE Events`);
 
     // const [results] = await connection!.query('SELECT * FROM Events');
     // console.log('results', results)

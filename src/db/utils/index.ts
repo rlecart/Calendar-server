@@ -48,6 +48,7 @@ export const eventOverlaps = async (newEvent: EventInterface, userId: number) =>
       newEvent.startTime,
       newEvent.endTime,
     ]);
+    console.log('results', results)
     return (results as mysql.RowDataPacket[]).length > 0;
   } catch (err) {
     console.log('eventOverlaps err', err)

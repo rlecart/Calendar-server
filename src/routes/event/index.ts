@@ -27,9 +27,9 @@ router.post('/', [
   createEventMiddleware,
 ], async (req: Request, res: Response) => {
   try {
-    console.log('req.user', req.user);
-    const newEventId = await db.createEvent(req.body, 8);
-    console.log('newEventId', newEventId)
+    const userId = (req.user as IUser).id;
+
+    const newEventId = await db.createEvent(req.body, userId);
 
     res.status(200).send({
       id: newEventId,
