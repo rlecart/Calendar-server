@@ -1,5 +1,3 @@
-import { promisify } from 'util';
-
 import mysql, { Connection } from 'mysql2/promise'
 
 import DB_PASSWORD from '../../secrets/db'
@@ -249,7 +247,7 @@ const updateEvent = async (userId: number, eventId: number, newEvent: EventInter
   try {
     await ensureConnection();
 
-    const [results] = await connection!.query(query, [
+    await connection!.query(query, [
       newEvent.title,
       newEvent.description,
       newEvent.startTime,
@@ -279,7 +277,7 @@ const deleteEvent = async (userId: number, eventId: number) => {
   try {
     await ensureConnection();
 
-    const [results] = await connection!.query(query, [
+    await connection!.query(query, [
       userId,
       eventId,
     ]);

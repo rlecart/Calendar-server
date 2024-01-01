@@ -17,7 +17,7 @@ import eventRoutes from '../routes/event';
 import { initDB } from "../db";
 
 const startServer = (options: OptionsInterface) => {
-  return (new Promise(async (res, rej) => {
+  return (new Promise(async (res, _rej) => {
     const app = express();
     app.use(express.json());
     app.use(cookieParser(SECRET));
@@ -63,7 +63,7 @@ const startServer = (options: OptionsInterface) => {
     configurePassportStrategies();
 
 
-    app.get('/', (req, res) => {
+    app.get('/', (_req, res) => {
       res.send('homepage');
     });
     // await app.use('/dev', devRoutes);

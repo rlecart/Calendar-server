@@ -3,8 +3,6 @@ import passport from 'passport';
 
 // import { isEmpty } from '../utils/utils.js';
 
-import jwt from "jsonwebtoken";
-
 // import bcrypt from 'bcryptjs';
 
 import SECRET from '../../secret';
@@ -23,14 +21,14 @@ const cookieExtractor = (req: Request) => {
 };
 
 export const configurePassportStrategies = () => {
-  return (new Promise((res, rej) => {
+  return (new Promise((res, _rej) => {
     const accessJwtOptions = {
       jwtFromRequest: cookieExtractor,
       secretOrKey: SECRET,
     };
 
     passport.use(new LocalStrategy({ session: true, passReqToCallback: true },
-      async (req, username, password, done) => {
+      async (_req, username, password, done) => {
         try {
           if (!username || !password)
             throw (400);

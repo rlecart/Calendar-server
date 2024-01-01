@@ -1,11 +1,9 @@
 import express from 'express';
 const router = express.Router({ mergeParams: true });
-import jwt from 'jsonwebtoken';
 
 import { Request, Response } from 'express'
 import { createEventMiddleware, deleteEventMiddleware, getDayEventMiddleware, getMonthEventMiddleware, updateEventMiddleware } from './eventMiddlewares';
 import db from '../../db';
-import SECRET from '../../../secret';
 import passport from 'passport';
 import { IUser } from '../user';
 

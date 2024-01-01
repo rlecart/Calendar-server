@@ -6,7 +6,6 @@ import { Request, Response } from 'express'
 import { createUserMiddleware, loginMiddleware } from './userMiddlewares';
 import db from '../../db';
 import SECRET from '../../../secret';
-import passport from 'passport';
 
 // const { isEmpty } = require('../utils/utils.js');
 // const db = require('../database/db.js');

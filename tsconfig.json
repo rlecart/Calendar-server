@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["es2015", "dom"],
+    "sourceMap": true,                       
+    "outDir": "./build",
+
+    "strict": true,
+    "strictPropertyInitialization": false,
+
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "moduleResolution": "node",
+    // "types": ["reflect-metadata"],
+    "esModuleInterop": true,
+    "inlineSources": true,
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true
+},
+"exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+  ],
+  "types": [
+    "typePatches"
+  ]
+}

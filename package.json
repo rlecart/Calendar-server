@@ -6,7 +6,10 @@
   "scripts": {
     "start": "nodemon ./src/index.ts",
     "test": "./node_modules/.bin/_mocha -S test/**/*.ts --reporter spec",
-    "coverage": "NODE_ENV=test nyc --include src --all -r text -r lcov ./node_modules/.bin/_mocha -S test/**/*.ts"
+    "coverage": "NODE_ENV=test nyc --include src --all -r text -r lcov ./node_modules/.bin/_mocha -S test/**/*.ts",
+
+    "build": "rimraf build && tsc -p tsconfig.json",
+    "pm2": "NODE_ENV=production pm2 start build/server.js --watch -i max"
   },
   "repository": {
     "type": "git",
