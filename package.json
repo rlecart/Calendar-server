@@ -2,14 +2,14 @@
   "name": "calendar-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "calendarplaner.ts",
   "scripts": {
-    "start": "nodemon ./src/index.ts",
+    "start": "nodemon ./src/calendarplaner.ts",
     "test": "./node_modules/.bin/_mocha -S test/**/*.ts --reporter spec",
     "coverage": "NODE_ENV=test nyc --include src --all -r text -r lcov ./node_modules/.bin/_mocha -S test/**/*.ts",
 
     "build": "rimraf build && tsc -p tsconfig.json",
-    "pm2": "NODE_ENV=production pm2 start build/src/index.js --watch -i max"
+    "pm2": "NODE_ENV=production pm2 start build/src/calendarplaner.js --watch -i max"
   },
   "repository": {
     "type": "git",
