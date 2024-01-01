@@ -1,1 +1,1 @@
-sudo mysql -u root -p < ./src/scripts/createDB.sql
+sudo mysql -u root -p calendar_planer < ./src/scripts/createDB.sql
