@@ -31,6 +31,7 @@ router.post('/signup', [
     res.cookie('jwt', token, {
       httpOnly: true,
       sameSite: 'lax',
+      // sameSite: true,
       // signed: true, // ca ca unauthorized avec passport
       secure: false,
       // maxAge: 1000 * 10, // 10s
@@ -65,12 +66,10 @@ router.post('/login', [
     }, SECRET, { expiresIn: '24h' });
 
     res.cookie('jwt', token, {
+      maxAge: 24 * 60 * 60 * 1000,
       httpOnly: true,
-      sameSite: 'lax',
-      // signed: true, // ca ca unauthorized avec passport
-      secure: false,
-      // maxAge: 1000 * 10, // 10s
-      maxAge: 24 * 60 * 60 * 1000, // 24h
+      sameSite: 'strict',
+      secure: true,
     });
 
     res.sendStatus(200)

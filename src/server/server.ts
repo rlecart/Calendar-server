@@ -34,9 +34,17 @@ const startServer = (options: OptionsInterface) => {
         saveUninitialized: true,
       })
     );
+
+    // app.use(function(req, res, next) {
+    //   res.header('Access-Control-Allow-Credentials', true);
+    //   res.header('Access-Control-Allow-Origin', req.headers.origin);
+    //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    //   res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+    //   next();
+    // });
     const corsOptions = {
-      origin: `http://${options.front.path}:${options.front.port}`,
-      // origin: `https://${options.front.path}:${options.front.port}`, TODO: changer en prod
+      // origin: `http://${options.front.path}:${options.front.port}`,
+      origin: `https://${options.front.path}:${options.front.port}`, // TODO: changer en prod
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
       credentials: true,
     };
