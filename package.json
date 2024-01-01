@@ -9,7 +9,7 @@
     "coverage": "NODE_ENV=test nyc --include src --all -r text -r lcov ./node_modules/.bin/_mocha -S test/**/*.ts",
 
     "build": "rimraf build && tsc -p tsconfig.json",
-    "pm2": "NODE_ENV=production pm2 start build/index.js --watch -i max"
+    "pm2": "NODE_ENV=production pm2 start build/src/index.js --watch -i max"
   },
   "repository": {
     "type": "git",
