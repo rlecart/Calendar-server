@@ -1,17 +1,12 @@
+import { Request } from 'express';
 import passport from 'passport';
-// import JwtStrategy from ('passport-jwt/Strategy');
-
-// import { isEmpty } from '../utils/utils.js';
-
-// import bcrypt from 'bcryptjs';
-
-import SECRET from '../../secret';
 import { Strategy as JwtStrategy } from 'passport-jwt';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { Request } from 'express';
+import { RowDataPacket } from "mysql2"
+
 import db from '../db';
 
-import { RowDataPacket } from "mysql2"
+import SERVER_SECRET from '../../secrets/secret';
 
 const cookieExtractor = (req: Request) => {
   let token = null;
@@ -24,7 +19,7 @@ export const configurePassportStrategies = () => {
   return (new Promise((res, _rej) => {
     const accessJwtOptions = {
       jwtFromRequest: cookieExtractor,
-      secretOrKey: SECRET,
+      secretOrKey: SERVER_SECRET,
     };
 
     passport.use(new LocalStrategy({ session: true, passReqToCallback: true },
@@ -40,7 +35,7 @@ export const configurePassportStrategies = () => {
           return done(null, user[0]);
         }
         catch (err) {
-          console.log('cuic', err);
+          console.log('passport LocalStrategy err', err);
           done(null, false, { message: 'User not found' });
         }
       }
@@ -54,22 +49,14 @@ export const configurePassportStrategies = () => {
         return done(null, payload, { success: true });
       }
       catch (err) {
-        console.log('ca err jwt passport', err);
+        console.log('passport JwtStrategy err', err);
         return (done(null, false, { success: false, code: err }));
       }
-    })
-    );
+    }));
 
-    passport.serializeUser((user: Express.User, done) => {
-      console.log('ser', user);
-      done(null, user);
-    });
+    passport.serializeUser((user: Express.User, done) => done(null, user));
 
-    passport.deserializeUser((user: Express.User, done) => {
-      console.log('des', user);
-      done(null, user);
-    });
+    passport.deserializeUser((user: Express.User, done) => done(null, user));
     res(null);
-  })
-  );
+  }));
 };

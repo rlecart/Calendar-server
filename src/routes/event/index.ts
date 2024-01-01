@@ -1,24 +1,13 @@
-import express from 'express';
-const router = express.Router({ mergeParams: true });
-
-import { Request, Response } from 'express'
-import { createEventMiddleware, deleteEventMiddleware, getDayEventMiddleware, getMonthEventMiddleware, updateEventMiddleware } from './eventMiddlewares';
-import db from '../../db';
+import express, { Request, Response } from 'express';
 import passport from 'passport';
+
+import db from '../../db';
+
+import { createEventMiddleware, deleteEventMiddleware, getDayEventMiddleware, getMonthEventMiddleware, updateEventMiddleware } from './eventMiddlewares';
+
 import { IUser } from '../user';
 
-export interface CalendarEventDataInterface {
-  id: number,
-  title: string,
-  description: string,
-  startTime: string,
-  endTime: string,
-  notes: string,
-  color: string,
-  dayOfMonth: number,
-  month: number,
-  year: number,
-}
+const router = express.Router({ mergeParams: true });
 
 router.post('/', [
   passport.authenticate('jwt', { session: false }),
@@ -72,7 +61,6 @@ router.get('/year/:year/month/:month/day/:day', [
 
     const events = await db.getDayEvents(user.id, month, year, day);
 
-    console.log('events', events)
     res.status(200).send(events);
   }
   catch (err) {

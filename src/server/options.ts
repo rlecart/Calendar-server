@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 const keyPath = process.env.NODE_ENV === 'production'
   ? __dirname + '/../../../certs/key.pem'
@@ -10,13 +10,11 @@ const certPath = process.env.NODE_ENV === 'production'
 
 const key = fs.readFileSync(keyPath);
 const cert = fs.readFileSync(certPath);
-// const key = undefined;
-// const cert = undefined;
 
-export interface OptionsInterface {
+export interface IOptions {
   credentials: {
-    key: string,
-    cert: string,
+    key: Buffer,
+    cert: Buffer,
   },
   front: {
     path: string,

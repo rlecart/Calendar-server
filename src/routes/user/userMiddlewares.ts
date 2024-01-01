@@ -1,30 +1,34 @@
 import { Request, Response, NextFunction } from 'express'
+import passport from 'passport';
 
 import db from '../../db';
-import passport from 'passport';
+
 import { IVerifyOptions } from 'passport-local';
 
-interface Body {
+interface IBody {
   username: string,
   password: string,
 }
 
 export const createUserMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const body: Body = req.body;
+    const body: IBody = req.body;
 
     if (!body.username || !body.password)
-      throw (400);
+      throw ('body undefined');
 
     if (await db.usernameExists(body.username))
-      return res.status(409).send('Cet identifiant est déjà pris');
+      throw ('username already exists')
 
     next();
-  } catch (err) {
+  }
+  catch (err) {
     console.log('createUserMiddleware err', err)
 
-    if (err === 400)
+    if (err === 'body undefined')
       res.sendStatus(400);
+    else if (err === 'username already exists')
+      res.status(409).send('Cet identifiant est déjà pris');
     else
       res.sendStatus(500);
   }

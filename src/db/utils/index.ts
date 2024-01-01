@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise'
 
-import { EventInterface } from "../../routes/event/eventMiddlewares";
+import { IEvent } from "../../routes/event/eventMiddlewares";
 
 import { pool } from "../index";
 
@@ -11,20 +11,18 @@ export const usernameExists = async (username: string) => {
   `;
 
   try {
-    // await ensureConnection();
+    const [results] = await pool!.query(sql, [username]);
 
-    const [results] = await pool!.query(sql, [
-      username
-    ]);
     return (results as mysql.RowDataPacket[]).length > 0;
-  } catch (err) {
+  }
+  catch (err) {
     console.log('usernameExists err', err)
     throw err;
   }
 
 }
 
-export const eventOverlaps = async (newEvent: EventInterface, userId: number) => {
+export const eventOverlaps = async (newEvent: IEvent, userId: number) => {
   console.log('newEvent', newEvent)
   const sql = `
       SELECT * FROM Events
@@ -37,20 +35,16 @@ export const eventOverlaps = async (newEvent: EventInterface, userId: number) =>
   `;
 
   try {
-    // await ensureConnection();
-
     const [results] = await pool!.query(sql, [
       userId,
-      newEvent.startTime,
-      newEvent.endTime,
-      newEvent.startTime,
-      newEvent.endTime,
-      newEvent.startTime,
-      newEvent.endTime,
+      newEvent.startTime, newEvent.endTime,
+      newEvent.startTime, newEvent.endTime,
+      newEvent.startTime, newEvent.endTime,
     ]);
-    console.log('results', results)
+
     return (results as mysql.RowDataPacket[]).length > 0;
-  } catch (err) {
+  }
+  catch (err) {
     console.log('eventOverlaps err', err)
     throw err;
   }

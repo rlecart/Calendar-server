@@ -1,29 +1,29 @@
-import { OptionsInterface } from "./options";
-
-import express from 'express';
 import https from 'https';
-import SECRET from '../../secret';
+import express from 'express';
 import session from 'express-session';
 import passport from "passport";
-import { configurePassportStrategies } from '../passport/passportStrategies';
-
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-// const db = require('../database/db.js');
 
-// const devRoutes = require('../routes/dev.js');
+import { configurePassportStrategies } from '../passport/passportStrategies';
+
 import userRoutes from '../routes/user';
 import eventRoutes from '../routes/event';
+
 import { initDB } from "../db";
 
-const startServer = (options: OptionsInterface) => {
+import { IOptions } from "./options";
+
+import SERVER_SECRET from '../../secrets/secret';
+
+const startServer = (options: IOptions) => {
   return (new Promise(async (res, _rej) => {
     const app = express();
     app.use(express.json());
-    app.use(cookieParser(SECRET));
+    app.use(cookieParser(SERVER_SECRET));
     app.use(
       session({
-        secret: SECRET,
+        secret: SERVER_SECRET,
         cookie: {
           maxAge: 24 * 60 * 60 * 1000,
           httpOnly: true,
@@ -35,17 +35,10 @@ const startServer = (options: OptionsInterface) => {
       })
     );
 
-    // app.use(function(req, res, next) {
-    //   res.header('Access-Control-Allow-Credentials', true);
-    //   res.header('Access-Control-Allow-Origin', req.headers.origin);
-    //   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    //   res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-    //   next();
-    // });
     const corsOptions = {
       origin: `https://${options.front.path}`,
-      // origin: `https://${options.front.path}:${options.front.port}`, // TODO: changer en prod
-      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+      // origin: `https://${options.front.path}:${options.front.port}`, // for dev
+      optionsSuccessStatus: 200,
       credentials: true,
     };
     app.use(cors(corsOptions));
@@ -54,18 +47,12 @@ const startServer = (options: OptionsInterface) => {
 
     await initDB();
 
-    // app.use(
-    //   express.urlencoded({
-    //     extended: true,
-    //   })
-    // );
-
     configurePassportStrategies();
 
 
-    app.get('/', (_req, res) => {
-      res.send('homepage');
-    });
+    // app.get('/', (_req, res) => {
+    //   res.send('homepage');
+    // });
     // await app.use('/dev', devRoutes);
     app.use('/user', userRoutes);
     app.use('/event', eventRoutes);
