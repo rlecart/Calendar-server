@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS calendar_planer;
 
+USE calendar_planer;
+
 CREATE TABLE IF NOT EXISTS Events (
   id INT AUTO_INCREMENT PRIMARY KEY,
   userId INT NOT NULL,
