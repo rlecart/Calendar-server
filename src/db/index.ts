@@ -1,23 +1,23 @@
-import mysql, { Connection } from 'mysql2/promise'
+import mysql, { Pool } from 'mysql2/promise'
 
 import DB_PASSWORD from '../../secrets/db'
 
 import { usernameExists, eventOverlaps } from "./utils"
 import { EventInterface } from '../routes/event/eventMiddlewares';
 
-export let connection: null | Connection = null;
+export let pool: null | Pool = null;
 
 export const initDB = async () => {
   try {
-    connection = await mysql.createConnection({
+    pool = mysql.createPool({
       host: 'localhost',
       user: 'root',
       password: DB_PASSWORD,
-      database: 'calendar_planer'
+      database: 'calendar_planer',
     });
 
     console.log("Successfully connected to the database.");
-    return connection;
+    return pool;
 
   } catch (error) {
     console.error("Error connecting to the database:", error);
@@ -25,13 +25,13 @@ export const initDB = async () => {
   }
 };
 
-export const ensureConnection = async () => {
-  if (!connection) {
-    connection = await initDB();
-    if (!connection)
-      throw new Error('Could not connect to database.');
-  }
-}
+// export const ensureConnection = async () => {
+//   if (!pool) {
+//     pool = await initDB();
+//     if (!pool)
+//       throw new Error('Could not connect to database.');
+//   }
+// }
 
 const firstQuery = async () => {
   try {
@@ -52,18 +52,18 @@ const firstQuery = async () => {
     //     year INT NOT NULL
     //   );
     // `;
-    // await connection!.query(createEventsTable);
+    // await pool!.query(createEventsTable);
 
-    // await connection!.query(`DROP TABLE Events`);
+    // await pool!.query(`DROP TABLE Events`);
 
-    // const [results] = await connection!.query('SELECT * FROM Events');
+    // const [results] = await pool!.query('SELECT * FROM Events');
     // console.log('results', results)
 
     //   const username = 'username3';
     //   const password = 'password';
     //   const query = `INSERT INTO Users (username, password) VALUES (?, ?)`;
 
-    //   await connection.query(query, [username, password], (error, results) => {
+    //   await pool.query(query, [username, password], (error, results) => {
     //     if (error) throw error;
     //     console.log("User created successfully.", results);
     //   });
@@ -90,9 +90,9 @@ const createUser = async (username: string, password: string) => {
   `;
 
   try {
-    await ensureConnection();
+    // await ensureConnection();
 
-    const [results] = await connection!.query(query, [username, password]);
+    const [results] = await pool!.query(query, [username, password]);
     return (results as mysql.ResultSetHeader).insertId;
   } catch (err) {
     console.log('createUser err', err)
@@ -108,9 +108,9 @@ const createEvent = async (newEvent: EventInterface, userId: number) => {
   `;
 
   try {
-    await ensureConnection();
+    // await ensureConnection();
 
-    const [results] = await connection!.query(query, [
+    const [results] = await pool!.query(query, [
       userId,
       newEvent.title,
       newEvent.description,
@@ -138,9 +138,9 @@ const getUserByUsername = async (username: string) => {
   `;
 
   try {
-    await ensureConnection();
+    // await ensureConnection();
 
-    const [results] = await connection!.query(query, [
+    const [results] = await pool!.query(query, [
       username
     ]);
 
@@ -162,9 +162,9 @@ const getMonthEvents = async (month: number, year: number, userId: number) => {
   `;
 
   try {
-    await ensureConnection();
+    // await ensureConnection();
 
-    const [results] = await connection!.query(query, [
+    const [results] = await pool!.query(query, [
       userId,
       year,
       month,
@@ -189,9 +189,9 @@ const getDayEvents = async (userId: number, month: number, year: number, day: nu
   `;
 
   try {
-    await ensureConnection();
+    // await ensureConnection();
 
-    const [results] = await connection!.query(query, [
+    const [results] = await pool!.query(query, [
       userId,
       year,
       month,
@@ -213,9 +213,9 @@ const getEventById = async (userId: number, eventId: number) => {
   `;
 
   try {
-    await ensureConnection();
+    // await ensureConnection();
 
-    const [results] = await connection!.query(query, [
+    const [results] = await pool!.query(query, [
       userId,
       eventId,
     ]);
@@ -245,9 +245,9 @@ const updateEvent = async (userId: number, eventId: number, newEvent: EventInter
   `;
 
   try {
-    await ensureConnection();
+    // await ensureConnection();
 
-    await connection!.query(query, [
+    await pool!.query(query, [
       newEvent.title,
       newEvent.description,
       newEvent.startTime,
@@ -275,9 +275,9 @@ const deleteEvent = async (userId: number, eventId: number) => {
   `;
 
   try {
-    await ensureConnection();
+    // await ensureConnection();
 
-    await connection!.query(query, [
+    await pool!.query(query, [
       userId,
       eventId,
     ]);
