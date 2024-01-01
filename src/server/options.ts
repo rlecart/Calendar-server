@@ -1,11 +1,11 @@
 const fs = require('fs');
 
 const keyPath = process.env.NODE_ENV === 'production'
-  ? '/etc/letsencrypt/live/calendarplaner.cloud/privkey.pem'
+  ? __dirname + '/../../../certs/key.pem'
   : __dirname + '/../../certs/key.pem';
 
 const certPath = process.env.NODE_ENV === 'production'
-  ? '/etc/letsencrypt/live/calendarplaner.cloud/fullchain.pem'
+  ? __dirname + '/../../../certs/cert.pem'
   : __dirname + '/../../certs/cert.pem';
 
 const key = fs.readFileSync(keyPath);
