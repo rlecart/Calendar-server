@@ -2,7 +2,7 @@ import mysql from 'mysql2/promise'
 
 import { EventInterface } from "../../routes/event/eventMiddlewares";
 
-import { connection, ensureConnection } from "../index";
+import { pool } from "../index";
 
 export const usernameExists = async (username: string) => {
   const sql = `
@@ -11,9 +11,9 @@ export const usernameExists = async (username: string) => {
   `;
 
   try {
-    await ensureConnection();
+    // await ensureConnection();
 
-    const [results] = await connection!.query(sql, [
+    const [results] = await pool!.query(sql, [
       username
     ]);
     return (results as mysql.RowDataPacket[]).length > 0;
@@ -37,9 +37,9 @@ export const eventOverlaps = async (newEvent: EventInterface, userId: number) =>
   `;
 
   try {
-    await ensureConnection();
+    // await ensureConnection();
 
-    const [results] = await connection!.query(sql, [
+    const [results] = await pool!.query(sql, [
       userId,
       newEvent.startTime,
       newEvent.endTime,
